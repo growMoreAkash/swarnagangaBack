@@ -4,6 +4,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken"
 import Product from "../model/product.model.js"
 import mongoose from "mongoose";
+// import nodemailer from "nodemailer"
+import { transporter } from "../utils/email.js";
+
 
 export const sendOtpMiddle = async (req, res, next) => {
     try {
@@ -39,6 +42,7 @@ export const sendOtpMiddle = async (req, res, next) => {
     }
 }
 
+
 export const signup = async (req, res) => {
     try {
         const { phone, email, fullname, password } = req.body;
@@ -51,6 +55,7 @@ export const signup = async (req, res) => {
         if (user && user.phoneVerified === true && user.emailVerified === true) {
             return res.status(400).send("User already exists and is verified");
         }
+
 
         const hashPassword = await bcrypt.hash(password, 12)
         if (!hashPassword) return res.status(404).send("Error while hashing the password")
